@@ -1,0 +1,19 @@
+{% extends "base.jinja2" %}
+{% block content %}
+    <div class="page-header">
+        <h1>Stock Alerts <br/>
+            <small>Scan any ticker for significant price drops</small></h1>
+    </div>
+    <div class="list-group">
+    {% for alert in alerts %}
+        <a href="{{ url_for('alerts.get_alert_page', alert_id=alert._id) }}" class="list-group-item {{ 'list-group-item-warning' if not alert.active else '' }}">
+            <h4 class="list-group-item-heading">
+                {{ '<span class="glyphicon glyphicon-remove-circle"></span>' if not alert.active else '' }} Alert for {{ alert.item.name }}</h4>
+            <p class="list-group-item-text">Last price found <strong>${{ alert.item.price }}</strong><br/>
+                Last checked on <strong>{{ alert.last_checked.strftime("%m-%d-%Y at %H:%M") }} UTC</strong><br/>
+            Price limit: <strong>${{ alert.price_limit }}</strong></p>
+        </a>
+    {% endfor %}
+    </div>
+    <a class="btn btn-success" href="{{ url_for('alerts.create_alert') }}"><span class="glyphicon glyphicon-plus"></span> Create New</a>
+{% endblock %}
